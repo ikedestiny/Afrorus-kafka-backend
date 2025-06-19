@@ -5,7 +5,6 @@ FROM eclipse-temurin:17-jdk-jammy AS builder
 WORKDIR /app
 COPY gradle ./gradle
 COPY gradlew .
-COPY gradle.properties .
 COPY settings.gradle .
 COPY build.gradle .
 
@@ -20,7 +19,7 @@ RUN ./gradlew clean build -x test --no-daemon
 FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
-COPY --from=builder /app/build/libs/email-service-*.jar ./app.jar
+COPY --from=builder /app/build/libs/user-service-*.jar ./app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

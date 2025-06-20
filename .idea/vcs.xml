@@ -4,9 +4,7 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/VideoTrimmer" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/auth-service" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/consumer-service" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/email-service" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/producer-service" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/user-service" vcs="Git" />
   </component>
 </project>

@@ -1,6 +1,7 @@
 package com.example.emailservice.service;
 
 import com.example.emailservice.dto.Email;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,6 +11,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
+@Slf4j
 public class EmailService {
     private final JavaMailSender mailSender;
     private final RedisVerificationCodeService redisVerificationCodeService;
@@ -33,9 +35,12 @@ public class EmailService {
 
     @KafkaListener(topics = "new-user", groupId = "example-group")
     public void sendVerificationCode(String email) {
-        int randomSixDigit = ThreadLocalRandom.current().nextInt(100_000, 1_000_000); // from 100000 to 999999
-        sendEmail(new Email(email,"Email Verification","Verification Code: "+randomSixDigit));
-        redisVerificationCodeService.saveVerificationCode(email,randomSixDigit);
+        int randomSixDigit = ThreadLocalRandom.current().nextInt(100_000, 1_000_000);
+        log.info("Generated verification code {} for email {}", randomSixDigit, email);
 
+        sendEmail(new Email(email,"Email Verification","Verification Code: "+randomSixDigit));
+        redisVerificationCodeService.saveVerificationCode(email, randomSixDigit);
+
+        log.debug("Stored code in Redis for email: {}", email);
     }
 }

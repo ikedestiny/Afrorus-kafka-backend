@@ -1,1 +1,6 @@
 rootProject.name = 'auth-service'
+buildCache {
+    local {
+        enabled = true
+    }
+}

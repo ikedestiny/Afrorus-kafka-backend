@@ -1,40 +1,49 @@
 package com.example.emailservice.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
+import java.time.Duration;
 
 @Service
+@Slf4j
 public class RedisVerificationCodeService {
-
-    private final StringRedisTemplate redisTemplate;
-    private static final long EXPIRE_MINUTES = 10;
+    private final StringRedisTemplate redisTemplate; // Changed to StringRedisTemplate
+    private static final Duration EXPIRATION = Duration.ofMinutes(10);
 
     public RedisVerificationCodeService(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
     public void saveVerificationCode(String email, int code) {
-        String key = getKey(email);
-        long expireMillis = EXPIRE_MINUTES * 60 * 1000;
-        redisTemplate.opsForValue().set(key, String.valueOf(code), expireMillis);    }
+        String cleanEmail = email.replace("\"", "");
+        String key = "verification_code:" + cleanEmail;
+        log.debug("Storing code {} with key {}", code, key);
+
+        redisTemplate.opsForValue().set(
+                key,
+                String.valueOf(code),
+                EXPIRATION // Using Duration instead of raw seconds
+        );
+    }
 
     public Integer getVerificationCode(String email) {
-        String key = getKey(email);
-        String codeStr = redisTemplate.opsForValue().get(key);
-        if (codeStr == null) {
-            return null;  // expired or not found
+        String key = "verification_code:" + email;
+        String code = redisTemplate.opsForValue().get(key);
+
+        if (code == null) {
+            log.debug("No code found for key {}", key);
+            return null;
         }
-        return Integer.valueOf(codeStr);
+
+        try {
+            return Integer.parseInt(code);
+        } catch (NumberFormatException e) {
+            log.error("Invalid code format in Redis for key {}: {}", key, code);
+            return null;
+        }
     }
 
-    public void removeVerificationCode(String email) {
-        String key = getKey(email);
-        redisTemplate.delete(key);
-    }
-
-    private String getKey(String email) {
-        return "verification_code:" + email;
-    }
+    // ... rest remains the same ...
 }

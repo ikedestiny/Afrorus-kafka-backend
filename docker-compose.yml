@@ -44,39 +44,6 @@ services:
     ports:
       - "6379:6379"
 
-  producer-service:
-    build: ./producer-service
-    container_name: producer-service
-    ports:
-      - "8080:8080"
-    depends_on:
-      - kafka
-      - postgres
-      - redis
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/app_db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: secret
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
-
-  consumer-service:
-    build: ./consumer-service
-    container_name: consumer-service
-    ports:
-      - "8081:8080"
-    depends_on:
-      - kafka
-      - postgres
-      - redis
-    environment:
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/app_db
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: secret
-      SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
 
   auth-service:
     build: ./auth-service

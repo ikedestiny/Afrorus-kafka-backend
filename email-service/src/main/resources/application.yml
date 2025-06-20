@@ -18,3 +18,13 @@ spring:
     redis:
       host: ${SPRING_REDIS_HOST:localhost}
       port: ${SPRING_REDIS_PORT:6379}
+
+  logging:
+    level:
+      org:
+        springframework:
+          kafka: INFO
+          data:
+            redis: INFO
+    pattern:
+      console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

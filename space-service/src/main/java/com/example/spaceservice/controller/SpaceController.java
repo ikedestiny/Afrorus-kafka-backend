@@ -10,6 +10,7 @@ import com.example.spaceservice.service.SpaceService;
 import com.example.spaceservice.utils.SpaceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,7 @@ public class SpaceController {
     SpaceService spaceService;
 
     @PostMapping("/doc-space-available")
+    @PreAuthorize("hasAuthority('CLIENT')")
     public ResponseEntity<?> createDocumentSpaceAvailable(@RequestBody SpaceAvailableForDocDto request) {
         Space space = SpaceMapper.from(request);
         return ResponseEntity.ok(spaceService.addSpace(space));

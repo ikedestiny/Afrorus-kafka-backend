@@ -26,3 +26,5 @@ logging:
   level:
     root: INFO
     org.springframework.web: DEBUG
+jwt:
+  secret: "your-secret-keyjkhdcjksjcuhklicghuijkscygktvcyhuchhwcjkwcyujihvuuyge"

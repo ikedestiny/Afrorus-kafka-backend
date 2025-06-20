@@ -39,6 +39,11 @@ dependencies {
 
     compileOnly 'org.projectlombok:lombok:latest'  // or latest
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // Spring Security + JWT Validation
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
 }
 
 tasks.named('bootBuildImage') {
